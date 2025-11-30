@@ -223,7 +223,6 @@ As a portfolio link
 
 🧾 Citation
 
-If you use this project for research/academics:
 
 ```
 A. Avishek, Automated Glaucoma Screening from Fundus Images Using CNNs, 2025.
