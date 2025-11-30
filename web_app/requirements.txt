@@ -1,11 +1,8 @@
 streamlit>=1.36.0
 
-torch          # let Streamlit Cloud pick a compatible CPU wheel
-torchvision
-
 albumentations>=1.4.0
 opencv-python-headless
 
-numpy          # no pin: grab a version compatible with Python 3.13
+onnxruntime
+numpy
 pillow
-requests
