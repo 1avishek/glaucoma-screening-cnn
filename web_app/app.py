@@ -53,7 +53,7 @@ def run_inference(image_pil, sess, input_name: str, output_name: str):
     # Albumentations on NumPy
     transform = get_transform()
     augmented = transform(image=image_np)
-    img = augmented["image"].astype(np.float32)  # HWC, normalized
+    img = augmented["image"].astype(np.float16)  # HWC, normalized for FP16 model
 
     # ONNX expects NCHW
     img = np.transpose(img, (2, 0, 1))  # HWC -> CHW
@@ -122,7 +122,7 @@ def main():
 
     if image_pil is not None:
         st.subheader("Input image")
-        st.image(image_pil, use_column_width=True)
+        st.image(image_pil, use_container_width=True)
 
         if st.button("Run glaucoma analysis"):
             with st.spinner("Running segmentation & computing CDR..."):
@@ -133,13 +133,13 @@ def main():
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.caption("Resized Image")
-                st.image(img_vis, use_column_width=True)
+                st.image(img_vis, use_container_width=True)
             with col2:
                 st.caption("Segmentation (Disc=Green, Cup=Red)")
-                st.image(mask_vis, use_column_width=True)
+                st.image(mask_vis, use_container_width=True)
             with col3:
                 st.caption("Overlay + CDR")
-                st.image(overlay, use_column_width=True)
+                st.image(overlay, use_container_width=True)
 
             st.markdown(f"**Vertical CDR:** `{cdr:.2f}`")
             st.markdown(f"**Risk classification:** `{label}`  (`{risk}`)")
