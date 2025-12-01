@@ -4,9 +4,5 @@ albumentations>=1.4.0
 opencv-python-headless
 
 onnxruntime
-onnx
 numpy
 pillow
-requests
-torch>=2.3.0
-torchvision>=0.18.0

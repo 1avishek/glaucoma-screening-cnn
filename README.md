@@ -150,6 +150,14 @@ This generates:
 - glaucoma_unet.onnx
 - glaucoma_unet.onnx.data
 
+Need these artifacts on another machine or for Streamlit deployment? Upload both files to your storage (e.g., Google Drive) and pull them back down with:
+
+```bash
+python download_onnx_assets.py --onnx-id <ID_FOR_glaucoma_unet.onnx> --data-id <ID_FOR_glaucoma_unet.onnx.data>
+```
+
+Omit `--data-id` if the export did not create a `.onnx.data` file.
+
 🌐 Run the Streamlit Web App (Local)
 
 ```bash
@@ -180,6 +188,7 @@ Make sure the repo contains:
 - ✔ requirements.txt
 - ✔ sample_images/
 - ✔ outputs/fold_*/best_model.pth
+- ✔ glaucoma_unet.onnx (+ glaucoma_unet.onnx.data) committed _or_ available via Google Drive IDs
 
 Step 2: Go to:
 
@@ -198,6 +207,15 @@ Streamlit Cloud will:
 - Install dependencies
 - Download your model files
 - Host your app online
+
+If you prefer not to commit the ONNX artifacts, upload them to Google Drive and set Streamlit secrets:
+
+```
+ONNX_FILE_ID="drive-id-for-glaucoma_unet.onnx"
+ONNX_DATA_FILE_ID="drive-id-for-glaucoma_unet.onnx.data"  # optional
+```
+
+The web app downloads them automatically at startup.
 
 📌 You will get a URL like:
 

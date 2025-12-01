@@ -1,29 +1,4 @@
-import random
 import numpy as np
-import torch
-
-
-def set_seed(seed=42):
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-
-
-def dice_score(pred, target, num_classes):
-    dices = {}
-    pred = pred.view(-1)
-    target = target.view(-1)
-
-    for cls in range(1, num_classes):  # skip bg
-        pred_c = (pred == cls).float()
-        tgt_c = (target == cls).float()
-
-        inter = (pred_c * tgt_c).sum()
-        denom = pred_c.sum() + tgt_c.sum()
-        dices[cls] = (2 * inter + 1e-6) / (denom + 1e-6)
-
-    return dices
 
 
 def compute_vertical_diameter(mask):
