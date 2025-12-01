@@ -83,11 +83,14 @@ glaucoma-screening-cnn/
 │-- visualize.py
 │-- evaluate.py
 │-- export_onnx.py
+│-- convert_to_fp16.py
 │-- predict.py
 │-- summarize_segmentation_from_models.py
+│-- download_onnx_assets.py
 │-- sample_images/
 │-- outputs/
 │-- glaucoma_unet.onnx
+│-- glaucoma_unet_fp16.onnx
 │-- requirements.txt
 └── README.md
 ```
@@ -141,22 +144,29 @@ Cup Dice mean  = 0.8836
 
 🟦 Export to ONNX (deployment-ready)
 
+1. Export the FP32 model:
+
 ```bash
 python export_onnx.py
 ```
 
-This generates:
+This creates `glaucoma_unet.onnx` (and possibly `glaucoma_unet.onnx.data` depending on export size).
 
-- glaucoma_unet.onnx
-- glaucoma_unet.onnx.data
+2. Convert to FP16 for deployment (smaller and used by the Streamlit app):
 
-Need these artifacts on another machine or for Streamlit deployment? Upload both files to your storage (e.g., Google Drive) and pull them back down with:
+```bash
+python convert_to_fp16.py
+```
+
+This writes `glaucoma_unet_fp16.onnx`.
+
+Need these artifacts on another machine or CI runner? Upload them to cloud storage and download later with:
 
 ```bash
 python download_onnx_assets.py --onnx-id <ID_FOR_glaucoma_unet.onnx> --data-id <ID_FOR_glaucoma_unet.onnx.data>
 ```
 
-Omit `--data-id` if the export did not create a `.onnx.data` file.
+Pass only `--onnx-id` if no `.onnx.data` file exists.
 
 🌐 Run the Streamlit Web App (Local)
 
@@ -188,7 +198,7 @@ Make sure the repo contains:
 - ✔ requirements.txt
 - ✔ sample_images/
 - ✔ outputs/fold_*/best_model.pth
-- ✔ glaucoma_unet.onnx (+ glaucoma_unet.onnx.data) committed _or_ available via Google Drive IDs
+- ✔ glaucoma_unet_fp16.onnx (plus glaucoma_unet.onnx/.data if you keep the FP32 export)
 
 Step 2: Go to:
 
@@ -208,29 +218,28 @@ Streamlit Cloud will:
 - Download your model files
 - Host your app online
 
+Optional pre-flight check:
+
+```
+python check_streamlit_ready.py
+```
+
 If you prefer not to commit the ONNX artifacts, upload them to Google Drive and set Streamlit secrets:
 
 ```
-ONNX_FILE_ID="drive-id-for-glaucoma_unet.onnx"
-ONNX_DATA_FILE_ID="drive-id-for-glaucoma_unet.onnx.data"  # optional
+ONNX_FILE_ID="drive-id-for-glaucoma_unet_fp16.onnx"
+ONNX_DATA_FILE_ID="drive-id-for-glaucoma_unet.onnx.data"  # optional fallback
 ```
 
-The web app downloads them automatically at startup.
+The web app downloads them automatically at startup and always prefers the FP16 model.
 
 📌 You will get a URL like:
 
 ```
 https://glaucoma-screening-cnn.streamlit.app/
 ```
+Live deployment: https://avishek-ananda-glaucoma-screening-cnngit.streamlit.app/
 
-You can share this with:
-
-- Teachers
-- Friends
-- Doctors
-- Recruiters
-
-As a portfolio link
 
 🖼 Example Output
 
@@ -241,9 +250,8 @@ As a portfolio link
 
 🧾 Citation
 
-
 ```
-A. Avishek, Automated Glaucoma Screening from Fundus Images Using CNNs, 2025.
+A. Avishek Kuri Ananda, Automated Glaucoma Screening from Fundus Images Using CNNs, 2025.
 ```
 
 📜 License
