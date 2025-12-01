@@ -9,8 +9,9 @@ data/
 models/
 outputs/
 *.pth
-!glaucoma_unet.onnx
-!glaucoma_unet.onnx.data
+*.onnx
+*.onnx.data
+!glaucoma_unet_fp16.onnx
 
 # Inference outputs (can be regenerated)
 inference_outputs/

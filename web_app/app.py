@@ -21,11 +21,12 @@ def get_transform():
 
 
 def resolve_onnx_path(project_root: Path) -> Path:
-    """Return the committed ONNX model (glaucoma_unet.onnx)."""
-    path = project_root.parent / "glaucoma_unet.onnx"
+    """Return the FP16 ONNX model committed to the repo."""
+    path = project_root.parent / "glaucoma_unet_fp16.onnx"
     if not path.exists():
         raise FileNotFoundError(
-            f"ONNX model not found at {path}. Commit glaucoma_unet.onnx to the repo."
+            f"ONNX model not found at {path}.\n"
+            "Make sure glaucoma_unet_fp16.onnx is committed to the repo."
         )
     return path
 
@@ -84,7 +85,7 @@ def main():
 
     st.sidebar.write("Loading ONNX model...")
     sess, input_name, output_name = load_session(project_root)
-    st.sidebar.write("Device: `cpu (ONNXRuntime)`")
+    st.sidebar.write("Device: `cpu (ONNXRuntime, FP16)`")
     st.sidebar.success("Model loaded.")
 
     # --- Input mode selection --- #
