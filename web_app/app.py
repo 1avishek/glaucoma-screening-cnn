@@ -20,20 +20,22 @@ def get_transform():
     )
 
 
+def resolve_onnx_path(project_root: Path) -> Path:
+    """Return the committed ONNX model (glaucoma_unet.onnx)."""
+    path = project_root.parent / "glaucoma_unet.onnx"
+    if not path.exists():
+        raise FileNotFoundError(
+            f"ONNX model not found at {path}. Commit glaucoma_unet.onnx to the repo."
+        )
+    return path
+
+
 @st.cache_resource
 def load_session(project_root: Path):
     """
     Load ONNX model with ONNX Runtime.
-
-    We use the smaller FP16 model:
-      glaucoma_unet_fp16.onnx  (committed to the repo root)
     """
-    onnx_path = project_root.parent / "glaucoma_unet_fp16.onnx"
-    if not onnx_path.exists():
-        raise FileNotFoundError(
-            f"ONNX model not found at {onnx_path}.\n"
-            "Make sure glaucoma_unet_fp16.onnx is committed to the repo."
-        )
+    onnx_path = resolve_onnx_path(project_root)
 
     sess = ort.InferenceSession(str(onnx_path), providers=["CPUExecutionProvider"])
     input_name = sess.get_inputs()[0].name
@@ -79,11 +81,10 @@ def main():
     st.title("Automated Glaucoma Screening from Fundus Images")
 
     project_root = Path(__file__).resolve().parent
-    device_label = "cpu (ONNXRuntime, FP16)"
 
-    st.sidebar.write(f"Device: `{device_label}`")
     st.sidebar.write("Loading ONNX model...")
     sess, input_name, output_name = load_session(project_root)
+    st.sidebar.write("Device: `cpu (ONNXRuntime)`")
     st.sidebar.success("Model loaded.")
 
     # --- Input mode selection --- #

@@ -35,5 +35,3 @@ env/
 .idea/
 
 web_app/web_model/
-glaucoma_unet.onnx
-glaucoma_unet.onnx.data
