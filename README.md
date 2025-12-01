@@ -1,6 +1,8 @@
 🚀 Automated Glaucoma Screening from Retinal Fundus Images Using CNNs
 Deep Learning · Medical Imaging · Segmentation · Clinical Explainability
 
+**Live Streamlit demo:** https://avishek-ananda-glaucoma-screening-cnngit.streamlit.app/
+
 This project implements a full clinical-grade glaucoma screening pipeline using retinal fundus images. It performs:
 
 - Optic disc & optic cup segmentation using a multi-fold U-Net ensemble
